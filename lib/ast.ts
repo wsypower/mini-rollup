@@ -3,7 +3,7 @@ import type acorn from 'acorn'
 import type Module from './Module'
 
 function analyse(ast: acorn.Node, code: MagicString, module: Module) {
-  (ast as any).body.forEach((statement: any) => {
+  (ast as any).body.forEach((statement: acorn.Node) => {
     Object.defineProperties(statement, {
       _module: {
         value: { value: module },

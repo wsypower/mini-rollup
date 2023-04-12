@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-12 12:48:49
+ * @LastEditTime: 2023-04-13 01:50:14
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -31,6 +31,22 @@ class Module {
       sourceType: 'module',
     })
     analyse(this.ast, this.code, this)
+  }
+
+  expandAllStatements() {
+    const allStatements: acorn.Node[] = [];
+
+    (this.ast as any).body.forEach((statement: acorn.Node) => {
+      const statements: acorn.Node[] = this.expandStatement(statement)
+      allStatements.push(...statements)
+    })
+    return allStatements
+  }
+
+  expandStatement(statement: acorn.Node) {
+    const result: acorn.Node[] = []
+    result.push(statement)
+    return result
   }
 }
 

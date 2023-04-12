@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-10 12:48:15
- * @LastEditTime: 2023-04-11 12:50:07
+ * @LastEditTime: 2023-04-13 01:46:53
  * @LastEditors: wsy
  */
 import path from 'node:path'
@@ -17,6 +17,7 @@ class Bundle {
   entry: string
   entryPath: string
   output!: string
+  statements!: acorn.Node[]
   constructor(options: BundleOptions) {
     this.entry = options.entry
     this.entryPath = path.resolve(options.entry)
@@ -24,6 +25,10 @@ class Bundle {
 
   build(output: string) {
     const entryModule = this.fetchModule(this.entryPath)
+    if (entryModule)
+      this.statements = entryModule.expandAllStatements()
+
+    console.log(this.statements)
   }
 
   fetchModule(importee: string) {

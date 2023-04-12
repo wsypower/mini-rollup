@@ -1,1 +1,4 @@
-console.log('测试输出')
+import test from './test'
+
+const a = 1
+console.log(a + test)
