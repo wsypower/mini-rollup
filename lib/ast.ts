@@ -6,10 +6,15 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
   (ast as any).body.forEach((statement: acorn.Node) => {
     Object.defineProperties(statement, {
       _module: {
-        value: { value: module },
+        value: module,
       },
       _source: {
-        value: { value: code.snip(statement.start, statement.end) },
+        value: code.snip(statement.start, statement.end),
+      },
+      _includes: {
+        value: false,
+        writable: true,
+        enumerable: true,
       },
     })
   })

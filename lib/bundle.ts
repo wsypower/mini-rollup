@@ -2,11 +2,12 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-10 12:48:15
- * @LastEditTime: 2023-04-13 01:46:53
+ * @LastEditTime: 2023-04-13 02:18:30
  * @LastEditors: wsy
  */
 import path from 'node:path'
 import fs from 'node:fs'
+import { Bundle as MagicBundle } from 'magic-string'
 import Module from './Module'
 
 interface BundleOptions {
@@ -27,6 +28,8 @@ class Bundle {
     const entryModule = this.fetchModule(this.entryPath)
     if (entryModule)
       this.statements = entryModule.expandAllStatements()
+    const { code } = this.generate()
+    fs.writeFileSync(output, code)
   }
 
   fetchModule(importee: string) {
@@ -40,6 +43,18 @@ class Bundle {
       })
       return module
     }
+  }
+
+  generate() {
+    const code = new MagicBundle({
+      separator: '\n',
+    })
+    this.statements.forEach((statement) => {
+      code.addSource({
+        content: (statement as any)._source,
+      })
+    })
+    return { code: code.toString() }
   }
 }
 

@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-13 01:50:14
+ * @LastEditTime: 2023-04-13 01:57:47
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -44,6 +44,7 @@ class Module {
   }
 
   expandStatement(statement: acorn.Node) {
+    // statement._includes = true
     const result: acorn.Node[] = []
     result.push(statement)
     return result
