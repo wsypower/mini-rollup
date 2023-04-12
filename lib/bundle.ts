@@ -27,8 +27,6 @@ class Bundle {
     const entryModule = this.fetchModule(this.entryPath)
     if (entryModule)
       this.statements = entryModule.expandAllStatements()
-
-    console.log(this.statements)
   }
 
   fetchModule(importee: string) {
