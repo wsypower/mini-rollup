@@ -3,11 +3,15 @@ lockfileVersion: 5.4
 specifiers:
   '@antfu/eslint-config': ^0.38.4
   '@types/node': ^18.15.11
+  acorn: ^8.8.2
   acron: ^1.0.5
   eslint: ^8.37.0
   magic-string: ^0.30.0
   ts-node: ^10.9.1
   typescript: ^5.0.3
+
+dependencies:
+  acorn: 8.8.2
 
 devDependencies:
   '@antfu/eslint-config': 0.38.4_vwh6htx42aidho2qgfca5u5rwm
@@ -431,7 +435,6 @@ packages:
     resolution: {integrity: sha512-xjIYgE8HBrkpd/sJqOGNspf8uHG+NOHGOw6a/Urj8taM2EXfdNAH2oFcPeIFfsv3+kz/mJrS5VuMqbNLjCa2vw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
-    dev: true
 
   /acron/1.0.5:
     resolution: {integrity: sha512-Jm3uey9PSUl5k9RsjBSfDJG35nG0vd9B4FUCV1J/NeVHDQ5HJPVpAhmGrPYtPKh0gLhEUIEy4DKqBy/p60B+4Q==}
