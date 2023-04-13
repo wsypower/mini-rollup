@@ -2,11 +2,11 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-13 02:31:34
+ * @LastEditTime: 2023-04-13 13:14:47
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
-import type acorn from 'acorn'
+import type { Node } from 'acorn'
 import { parse } from 'acorn'
 import { analyse } from './ast'
 import type Bundle from './bundle'
@@ -21,7 +21,7 @@ class Module {
   code: MagicString
   path: string
   bundle: Bundle
-  ast: acorn.Node
+  ast: Node
   constructor(options: ModuleOptions) {
     this.code = new MagicString(options.code)
     this.path = options.path
@@ -36,15 +36,15 @@ class Module {
   expandAllStatements() {
     const allStatements: acorn.Node[] = [];
 
-    (this.ast as any).body.forEach((statement: acorn.Node) => {
+    (this.ast as any).body.forEach((statement: Node) => {
       const statements: acorn.Node[] = this.expandStatement(statement)
       allStatements.push(...statements)
     })
     return allStatements
   }
 
-  expandStatement(statement: acorn.Node) {
-    statement._includes = true
+  expandStatement(statement: Node) {
+    (statement as any)._includes = true
     const result: acorn.Node[] = []
     result.push(statement)
     return result
