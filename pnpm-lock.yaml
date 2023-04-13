@@ -5,6 +5,7 @@ specifiers:
   '@types/fs-extra': ^11.0.1
   '@types/node': ^18.15.11
   acorn: ^8.8.2
+  acorn-walk: ^8.2.0
   acron: ^1.0.5
   eslint: ^8.37.0
   fs-extra: ^11.1.1
@@ -19,6 +20,7 @@ devDependencies:
   '@antfu/eslint-config': 0.38.4_vwh6htx42aidho2qgfca5u5rwm
   '@types/fs-extra': 11.0.1
   '@types/node': 18.15.11
+  acorn-walk: 8.2.0
   acron: 1.0.5
   eslint: 8.37.0
   fs-extra: 11.1.1

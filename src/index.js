@@ -1,12 +1,14 @@
 /*
- * @Description: 
+ * @Description: ceshi
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-13 21:20:13
+ * @LastEditTime: 2023-04-13 21:32:31
  * @LastEditors: wsy
  */
-import test from './test'
+import { age, name } from './test'
 
-const a = 2
+function say() {
+  console.log('hello world', name)
+}
 
-const c = a + test
+say()

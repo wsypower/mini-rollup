@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-13 13:14:47
+ * @LastEditTime: 2023-04-13 22:26:27
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -22,6 +22,10 @@ class Module {
   path: string
   bundle: Bundle
   ast: Node
+  // 存在依赖的模块
+  imports: Record<string, any> = {}
+  // 被依赖的模块
+  exports: Record<string, any> = {}
   constructor(options: ModuleOptions) {
     this.code = new MagicString(options.code)
     this.path = options.path
@@ -35,7 +39,6 @@ class Module {
 
   expandAllStatements() {
     const allStatements: acorn.Node[] = [];
-
     (this.ast as any).body.forEach((statement: Node) => {
       const statements: acorn.Node[] = this.expandStatement(statement)
       allStatements.push(...statements)

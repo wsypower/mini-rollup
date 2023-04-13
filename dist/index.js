@@ -1,3 +1,5 @@
-import test from './test'
-const a = 2
-const c = a + test
+import { age, name } from './test'
+function say() {
+  console.log('hello world', name)
+}
+say()
