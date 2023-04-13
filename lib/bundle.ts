@@ -2,13 +2,13 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-10 12:48:15
- * @LastEditTime: 2023-04-13 21:14:12
+ * @LastEditTime: 2023-04-13 21:19:52
  * @LastEditors: wsy
  */
 import path from 'node:path'
 import fs from 'node:fs'
 import { Bundle as MagicBundle } from 'magic-string'
-import { ensureDir } from 'fs-extra'
+import { emptyDir } from 'fs-extra'
 import Module from './Module'
 
 interface BundleOptions {
@@ -31,7 +31,7 @@ class Bundle {
       this.statements = entryModule.expandAllStatements()
     const { code } = this.generate()
     const dir = path.dirname(output)
-    ensureDir(dir).then(() => fs.writeFileSync(output, code))
+    emptyDir(dir).then(() => fs.writeFileSync(output, code))
   }
 
   fetchModule(importee: string) {
