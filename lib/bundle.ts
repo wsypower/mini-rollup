@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-10 12:48:15
- * @LastEditTime: 2023-04-13 21:19:52
+ * @LastEditTime: 2023-04-13 21:22:07
  * @LastEditors: wsy
  */
 import path from 'node:path'
@@ -27,11 +27,12 @@ class Bundle {
 
   build(output: string) {
     const entryModule = this.fetchModule(this.entryPath)
-    if (entryModule)
+    if (entryModule) {
       this.statements = entryModule.expandAllStatements()
-    const { code } = this.generate()
-    const dir = path.dirname(output)
-    emptyDir(dir).then(() => fs.writeFileSync(output, code))
+      const { code } = this.generate()
+      const dir = path.dirname(output)
+      emptyDir(dir).then(() => fs.writeFileSync(output, code))
+    }
   }
 
   fetchModule(importee: string) {
