@@ -2,13 +2,14 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-13 22:40:03
+ * @LastEditTime: 2023-04-14 02:07:40
  * @LastEditors: wsy
  */
 import type MagicString from 'magic-string'
 import type acorn from 'acorn'
-import { simple } from 'acorn-walk'
 import type Module from './Module'
+import Scope from './scope'
+import walk from './walk'
 
 function analyse(ast: acorn.Node, code: MagicString, module: Module) {
   // 开启第一轮的循环
@@ -25,6 +26,9 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
         writable: true,
       },
       _dependsOn: {
+        value: {},
+      },
+      _defines: {
         value: {},
       },
     })
@@ -51,18 +55,58 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
         })
       }
     }
-  });
+  })
 
   // 开启第二轮的循环
-  // const currentScope = new Scope({ name: '模块内的顶级作用域' })
+  let currentScope = new Scope({ name: '模块内的顶级作用域' })
+  let newScope: Scope
+
   (ast as any).body.forEach((statement: any) => {
-    simple(statement, {
-      // 导出了那些变量
-      Identifier(node: any) {
-        statement._dependsOn[node.name] = true
+    function addToScope(name: string) {
+      currentScope.add(name)
+      if (!currentScope.parent) {
+        statement._defines[name] = true
+        module.definitions[name] = statement
+      }
+    }
+    walk(statement, {
+      enter(node: any) {
+        let newScope
+        switch (node.type) {
+          case 'FunctionDeclaration':
+          case 'ArrowFunctionDeclaration':
+            addToScope(node.id.name)// 把函数名添加到当前的作用域变量中
+            newScope = new Scope({
+              name: node.id.name,
+              parent: currentScope, // 当创建新的作用域的时候，父作用域就是当前作用域
+              names: node.params.map((param: any) => param.name),
+              isBlock: false, // 函数创建的不是一个块级作用域
+            })
+            break
+          case 'VariableDeclaration':
+            node.declarations.forEach((declaration: any) => {
+              if (node.kind === 'let' || node.kind === 'const')
+                addToScope(declaration.id.name)
+
+              else
+                addToScope(declaration.id.name)
+            })
+            break
+          case 'BlockStatement':
+            newScope = new Scope({ parent: currentScope })
+            break
+          default:
+            break
+        }
+        if (newScope) {
+          Object.defineProperty(node, '_scope', { value: newScope })
+          currentScope = newScope
+        }
       },
-      CallExpression(node: any) {
-        console.log(node)
+      leave(node: any) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (Object.hasOwnProperty(node))
+          currentScope = currentScope.parent ?? currentScope
       },
     })
   })

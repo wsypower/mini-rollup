@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-13 22:26:27
+ * @LastEditTime: 2023-04-14 02:11:53
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -26,6 +26,8 @@ class Module {
   imports: Record<string, any> = {}
   // 被依赖的模块
   exports: Record<string, any> = {}
+  definitions: Record<string, any> = {}
+
   constructor(options: ModuleOptions) {
     this.code = new MagicString(options.code)
     this.path = options.path
