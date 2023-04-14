@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-14 13:19:30
+ * @LastEditTime: 2023-04-15 02:05:11
  * @LastEditors: wsy
  */
 import type MagicString from 'magic-string'
@@ -71,8 +71,10 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
     }
     walk(statement, {
       enter(node: any) {
-        let newScope
         switch (node.type) {
+          case 'Identifier':
+            statement._defines[node.name] = true
+            break
           case 'FunctionDeclaration':
           case 'ArrowFunctionDeclaration':
             addToScope(node.id.name)// 把函数名添加到当前的作用域变量中
