@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-14 02:07:40
+ * @LastEditTime: 2023-04-14 13:19:30
  * @LastEditors: wsy
  */
 import type MagicString from 'magic-string'
@@ -85,11 +85,7 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
             break
           case 'VariableDeclaration':
             node.declarations.forEach((declaration: any) => {
-              if (node.kind === 'let' || node.kind === 'const')
-                addToScope(declaration.id.name)
-
-              else
-                addToScope(declaration.id.name)
+              addToScope(declaration.id.name)
             })
             break
           case 'BlockStatement':
