@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-10 12:48:15
- * @LastEditTime: 2023-04-13 21:22:07
+ * @LastEditTime: 2023-04-15 02:35:35
  * @LastEditors: wsy
  */
 import path from 'node:path'
@@ -26,7 +26,7 @@ class Bundle {
   }
 
   build(output: string) {
-    const entryModule = this.fetchModule(this.entryPath)
+    const entryModule = this.fetchModule(`${this.entryPath.replace(/\.js/, '')}.js`)
     if (entryModule) {
       this.statements = entryModule.expandAllStatements()
       const { code } = this.generate()
@@ -35,8 +35,18 @@ class Bundle {
     }
   }
 
-  fetchModule(importee: string) {
-    const route = importee
+  fetchModule(importee: string, importer?: string) {
+    let route
+    if (!importer) {
+      route = importee
+    }
+    else {
+      if (path.isAbsolute(importee))
+        route = importee
+      else
+        route = path.resolve(path.dirname(importer), `${importee.replace(/\.js/, '')}.js`)
+    }
+
     if (route) {
       const code = fs.readFileSync(route, 'utf8')
       const module = new Module({
