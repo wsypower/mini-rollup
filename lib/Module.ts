@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-14 13:00:54
+ * @LastEditTime: 2023-04-15 02:47:56
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -10,6 +10,7 @@ import type { Node } from 'acorn'
 import { parse } from 'acorn'
 import { analyse } from './ast'
 import type Bundle from './bundle'
+import { hasOwnProperty } from './utils/index'
 
 interface ModuleOptions {
   code: string
@@ -42,6 +43,9 @@ class Module {
   expandAllStatements() {
     const allStatements: acorn.Node[] = [];
     (this.ast as any).body.forEach((statement: Node) => {
+      if (statement.type === 'ImportDeclaration')
+        return
+
       const statements: acorn.Node[] = this.expandStatement(statement)
       allStatements.push(...statements)
     })
@@ -51,8 +55,29 @@ class Module {
   expandStatement(statement: Node) {
     (statement as any)._includes = true
     const result: acorn.Node[] = []
+    const _dependsOn = Object.keys((statement as any)._dependsOn)
+    _dependsOn.forEach((name) => {
+      const definition = this.define(name)
+      result.push(...definition)
+    })
     result.push(statement)
     return result
+  }
+
+  define(name: string): any[] {
+    if (hasOwnProperty(this.imports, name)) {
+      const { source, importName } = this.imports[name]
+      const importModule = this.bundle.fetchModule(source, this.path)
+      const { localName } = importModule.exports[importName]
+      return importModule.define(localName)
+    }
+    else {
+      const statement = this.definitions[name]
+      if (statement && !statement._includes)
+        return this.expandStatement(statement)
+      else
+        return []
+    }
   }
 }
 

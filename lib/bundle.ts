@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-10 12:48:15
- * @LastEditTime: 2023-04-15 02:35:35
+ * @LastEditTime: 2023-04-15 03:06:54
  * @LastEditors: wsy
  */
 import path from 'node:path'
@@ -47,24 +47,27 @@ class Bundle {
         route = path.resolve(path.dirname(importer), `${importee.replace(/\.js/, '')}.js`)
     }
 
-    if (route) {
-      const code = fs.readFileSync(route, 'utf8')
-      const module = new Module({
-        code,
-        path: route,
-        bundle: this,
-      })
-      return module
-    }
+    const code = fs.readFileSync(route, 'utf8')
+    const module = new Module({
+      code,
+      path: route,
+      bundle: this,
+    })
+    return module
   }
 
   generate() {
     const code = new MagicBundle({
       separator: '\n',
     })
+
     this.statements.forEach((statement) => {
+      const source = (statement as any)._source
+      if (statement.type === 'ExportNamedDeclaration')
+        source.remove(statement.start, (statement as any).declaration.start)
+
       code.addSource({
-        content: (statement as any)._source,
+        content: source,
       })
     })
     return { code: code.toString() }

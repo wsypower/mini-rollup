@@ -1,4 +1,4 @@
-import { age, name } from './test'
+const name = 'wsy'
 function say() {
   console.log('hello world', name)
 }

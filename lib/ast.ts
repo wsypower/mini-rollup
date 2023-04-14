@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-15 02:05:11
+ * @LastEditTime: 2023-04-15 03:00:40
  * @LastEditors: wsy
  */
 import type MagicString from 'magic-string'
@@ -47,7 +47,7 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
     else if (statement.type === 'ExportNamedDeclaration') {
       const declaration = statement.declaration
       if (declaration && declaration.type === 'VariableDeclaration') {
-        const delcarations = declaration.delcarations
+        const delcarations = declaration.declarations
         delcarations.forEach((variableDeclarator: any) => {
           const localName = variableDeclarator.id.name
           const exportName = localName
@@ -73,7 +73,7 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
       enter(node: any) {
         switch (node.type) {
           case 'Identifier':
-            statement._defines[node.name] = true
+            statement._dependsOn[node.name] = true
             break
           case 'FunctionDeclaration':
           case 'ArrowFunctionDeclaration':
