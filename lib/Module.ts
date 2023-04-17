@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-15 02:47:56
+ * @LastEditTime: 2023-04-17 13:16:45
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -27,6 +27,7 @@ class Module {
   imports: Record<string, any> = {}
   // 被依赖的模块
   exports: Record<string, any> = {}
+  modifications: Record<string, any> = {}
   definitions: Record<string, any> = {}
 
   constructor(options: ModuleOptions) {
@@ -61,6 +62,18 @@ class Module {
       result.push(...definition)
     })
     result.push(statement)
+    const defines = Object.keys((statement as any)._defines)
+    defines.forEach((name) => {
+      const modifications = hasOwnProperty(this.modifications, name) && this.modifications[name]
+      if (modifications) {
+        modifications.forEach((statement: any) => {
+          if (!statement._includes) {
+            const modifies = this.expandStatement(statement)
+            result.push(...modifies)
+          }
+        })
+      }
+    })
     return result
   }
 

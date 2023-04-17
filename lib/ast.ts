@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-15 03:00:40
+ * @LastEditTime: 2023-04-17 13:19:20
  * @LastEditors: wsy
  */
 import type MagicString from 'magic-string'
@@ -10,6 +10,7 @@ import type acorn from 'acorn'
 import type Module from './Module'
 import Scope from './scope'
 import walk from './walk'
+import { hasOwnProperty } from './utils'
 
 function analyse(ast: acorn.Node, code: MagicString, module: Module) {
   // 开启第一轮的循环
@@ -29,6 +30,9 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
         value: {},
       },
       _defines: {
+        value: {},
+      },
+      _modifies: {
         value: {},
       },
     })
@@ -69,12 +73,29 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
         module.definitions[name] = statement
       }
     }
+    function checkForReads(node: any) {
+      if (node.type === 'Identifier')
+        return statement._dependsOn[node.name] = true
+    }
+    function checkForWrites(node: any) {
+      function addNode(node: any) {
+        const { name } = node
+        statement._modifies[name] = true
+        if (!hasOwnProperty(module.modifications, name))
+          module.modifications[name] = []
+
+        module.modifications[name].push(statement)
+      }
+      if (node.type === 'AssignmentExpression')
+        addNode(node.left)
+      else if (node.type === 'UpdateExpression')
+        addNode(node.argument)
+    }
     walk(statement, {
       enter(node: any) {
+        checkForReads(node)
+        checkForWrites(node)
         switch (node.type) {
-          case 'Identifier':
-            statement._dependsOn[node.name] = true
-            break
           case 'FunctionDeclaration':
           case 'ArrowFunctionDeclaration':
             addToScope(node.id.name)// 把函数名添加到当前的作用域变量中
