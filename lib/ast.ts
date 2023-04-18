@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-18 13:26:49
+ * @LastEditTime: 2023-04-19 01:35:15
  * @LastEditors: wsy
  */
 import type MagicString from 'magic-string'
@@ -62,13 +62,13 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
   })
 
   // 开启第二轮的循环
-  let currentScope = new Scope({ name: '模块内的顶级作用域' })
+  let currentScope = new Scope({ name: '模块内的顶级作用域', isBlack: true })
   let newScope: Scope
 
   (ast as any).body.forEach((statement: any) => {
     function addToScope(name: string, isBlockDeclaration = false) {
-      currentScope.add(name)
-      if (!currentScope.parent || (currentScope.isBlack && !isBlockDeclaration)) {
+      currentScope.add(name, isBlockDeclaration)
+      if (!currentScope.parent || (currentScope.isBlock && !isBlockDeclaration)) {
         statement._defines[name] = true
         module.definitions[name] = statement
       }

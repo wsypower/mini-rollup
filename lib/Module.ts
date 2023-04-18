@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-18 22:23:46
+ * @LastEditTime: 2023-04-19 01:18:07
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -12,7 +12,7 @@ import { analyse } from './ast'
 import type Bundle from './bundle'
 import { hasOwnProperty } from './utils/index'
 
-const SYSTEM_VARS = ['console']
+const SYSTEM_VARS = ['console', 'log']
 
 interface ModuleOptions {
   code: string
@@ -94,15 +94,14 @@ class Module {
         if (statement._includes)
           return []
         else
-          return []
+          return this.expandStatement(statement)
       }
       else {
-        return []
+        if (SYSTEM_VARS.includes(name))
+          return []
+        else
+          throw new Error(`Cannot find name '${name}'`)
       }
-      if (statement && !statement._includes)
-        return this.expandStatement(statement)
-      else
-        return []
     }
   }
 }

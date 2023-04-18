@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-14 12:51:09
- * @LastEditTime: 2023-04-18 13:28:43
+ * @LastEditTime: 2023-04-19 01:34:33
  * @LastEditors: wsy
  */
 interface ScopeOptions {
@@ -16,16 +16,20 @@ class Scope {
   name: string
   parent: Scope | null
   names: string[]
-  isBlack: boolean
+  isBlock: boolean
   constructor(options: ScopeOptions) {
     this.name = options.name ?? ''
     this.parent = options.parent ?? null
     this.names = options.names || []
-    this.isBlack = options.isBlack || false
+    this.isBlock = options.isBlock || false
   }
 
-  add(name: string) {
-    this.names.push(name)
+  add(name: string, isBlockDeclaration = false) {
+    if (!isBlockDeclaration && this.isBlock)
+      this.parent!.add(name)
+
+    else
+      this.names.push(name)
   }
 
   findDefiningScope(name: string): any {
