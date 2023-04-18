@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-11 12:48:38
- * @LastEditTime: 2023-04-17 13:16:45
+ * @LastEditTime: 2023-04-18 22:23:46
  * @LastEditors: wsy
  */
 import MagicString from 'magic-string'
@@ -11,6 +11,8 @@ import { parse } from 'acorn'
 import { analyse } from './ast'
 import type Bundle from './bundle'
 import { hasOwnProperty } from './utils/index'
+
+const SYSTEM_VARS = ['console']
 
 interface ModuleOptions {
   code: string
@@ -46,7 +48,8 @@ class Module {
     (this.ast as any).body.forEach((statement: Node) => {
       if (statement.type === 'ImportDeclaration')
         return
-
+      if (statement.type === 'VariableDeclaration')
+        return
       const statements: acorn.Node[] = this.expandStatement(statement)
       allStatements.push(...statements)
     })
@@ -86,6 +89,16 @@ class Module {
     }
     else {
       const statement = this.definitions[name]
+
+      if (statement) {
+        if (statement._includes)
+          return []
+        else
+          return []
+      }
+      else {
+        return []
+      }
       if (statement && !statement._includes)
         return this.expandStatement(statement)
       else

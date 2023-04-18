@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-04-13 12:48:11
- * @LastEditTime: 2023-04-17 13:19:20
+ * @LastEditTime: 2023-04-18 13:26:49
  * @LastEditors: wsy
  */
 import type MagicString from 'magic-string'
@@ -66,9 +66,9 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
   let newScope: Scope
 
   (ast as any).body.forEach((statement: any) => {
-    function addToScope(name: string) {
+    function addToScope(name: string, isBlockDeclaration = false) {
       currentScope.add(name)
-      if (!currentScope.parent) {
+      if (!currentScope.parent || (currentScope.isBlack && !isBlockDeclaration)) {
         statement._defines[name] = true
         module.definitions[name] = statement
       }
@@ -108,11 +108,14 @@ function analyse(ast: acorn.Node, code: MagicString, module: Module) {
             break
           case 'VariableDeclaration':
             node.declarations.forEach((declaration: any) => {
-              addToScope(declaration.id.name)
+              if (node.kind === 'let' || node.kind === 'const')
+                addToScope(declaration.id.name, true)
+              else
+                addToScope(declaration.id.name, false)
             })
             break
           case 'BlockStatement':
-            newScope = new Scope({ parent: currentScope })
+            newScope = new Scope({ parent: currentScope, isBlock: true })
             break
           default:
             break
