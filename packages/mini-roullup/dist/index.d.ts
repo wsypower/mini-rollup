@@ -1,0 +1,2 @@
+export * from "/Users/weiyafei/Documents/魏亚飞/vite/rollup-study/mini-rollup/packages/mini-roullup/src/index";
+export { default } from "/Users/weiyafei/Documents/魏亚飞/vite/rollup-study/mini-rollup/packages/mini-roullup/src/index";

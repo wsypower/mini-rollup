@@ -1,0 +1,13 @@
+{
+  "name": "basic",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "test": "tsx ./src/index.ts"
+  }
+}

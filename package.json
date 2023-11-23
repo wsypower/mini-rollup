@@ -8,12 +8,17 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pnpm -r build",
+    "stub": "pnpm -r stub"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^1.2.0",
     "@types/node": "^20.9.1",
     "eslint": "^8.53.0",
-    "typescript": "^5.2.2"
+    "mini-rollup": "workspace:^",
+    "tsc": "^2.0.4",
+    "tsx": "^4.4.0",
+    "typescript": "^5.2.2",
+    "unbuild": "^2.0.0"
   }
 }
