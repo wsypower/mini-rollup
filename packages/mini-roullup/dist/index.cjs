@@ -3,5 +3,7 @@ module.exports = require("/Users/weiyafei/Documents/魏亚飞/vite/rollup-study/
   "interopDefault": true,
   "alias": {
     "mini-rollup": "/Users/weiyafei/Documents/魏亚飞/vite/rollup-study/mini-rollup/packages/mini-roullup"
-  }
+  },
+  "debug": true,
+  "sourceMaps": true
 })("/Users/weiyafei/Documents/魏亚飞/vite/rollup-study/mini-rollup/packages/mini-roullup/src/index.ts")

@@ -6,7 +6,9 @@ const _module = jiti(null, {
   "interopDefault": true,
   "alias": {
     "mini-rollup": "/Users/weiyafei/Documents/魏亚飞/vite/rollup-study/mini-rollup/packages/mini-roullup"
-  }
+  },
+  "debug": true,
+  "sourceMaps": true
 })("/Users/weiyafei/Documents/魏亚飞/vite/rollup-study/mini-rollup/packages/mini-roullup/src/index.ts");
 
 export default _module;

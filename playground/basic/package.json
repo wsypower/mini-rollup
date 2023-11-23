@@ -8,6 +8,6 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "test": "tsx ./src/index.ts"
+    "test": "node ./src/index.js"
   }
 }
