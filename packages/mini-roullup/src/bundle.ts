@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-11-23 21:12:49
- * @LastEditTime: 2023-11-23 22:11:11
+ * @LastEditTime: 2023-11-24 22:43:45
  * @LastEditors: wsy
  */
 import fs from 'node:fs'
@@ -21,7 +21,9 @@ class Bundle {
 
   build(output: string) {
     const entryModule = this.fetchModule(this.entry)
-    console.log(entryModule)
+    if (entryModule) {
+      console.log(entryModule)
+    }
   }
 
   fetchModule(importee: string) {
@@ -33,6 +35,7 @@ class Bundle {
         path: router,
         bundle: this,
       })
+      return module
     }
   }
 }

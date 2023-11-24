@@ -1,7 +1,4 @@
-const options = {
-  name: 'John',
-  age: 30,
-  city: 'New York',
-}
+import { name } from './msg'
 
-export default options
+console.log('hello')
+console.log(name)
